@@ -15,7 +15,7 @@
     "customer": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::customer.customer",
+      "target": "plugin::users-permissions.user",
       "inversedBy": "blogs"
     },
     "title": {

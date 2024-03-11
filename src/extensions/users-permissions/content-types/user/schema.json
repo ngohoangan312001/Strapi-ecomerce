@@ -65,8 +65,46 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "test": {
+    "firstName": {
       "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "text"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "blogs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::blog.blog",
+      "mappedBy": "customer"
+    },
+    "addresses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::address.address",
+      "mappedBy": "user"
+    },
+    "carts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::cart.cart",
+      "mappedBy": "user"
     }
   }
 }

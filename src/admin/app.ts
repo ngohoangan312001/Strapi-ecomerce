@@ -23,15 +23,14 @@ export default {
     },
     // Override or extend the theme
     theme: {
-      colors: {
-        primary100: "#8312d1",
-        primary200: "#e0c1f4",
-        primary500: "#ac73e6",
-        primary600: "#9736e8",
-        primary700: "#8312d1",
-        danger700: "#b72b1a",
+      light:{
+        colors: {
+          primary700: '#4f0000',
+          primary100: '#da2c50',
+          primary600: '#520000',
+          buttonPrimary600: '#009ad2',
+        },
       },
-      light: true,
     },
     // Extend the translations
     translations: {

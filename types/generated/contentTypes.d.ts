@@ -718,7 +718,26 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    test: Attribute.String;
+    firstName: Attribute.String;
+    lastName: Attribute.String;
+    bio: Attribute.Text;
+    phone: Attribute.String;
+    avatar: Attribute.Media;
+    blogs: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::blog.blog'
+    >;
+    addresses: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::address.address'
+    >;
+    carts: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::cart.cart'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -827,10 +846,10 @@ export interface ApiAddressAddress extends Schema.CollectionType {
   };
   attributes: {
     city: Attribute.String;
-    customer: Attribute.Relation<
+    user: Attribute.Relation<
       'api::address.address',
       'manyToOne',
-      'api::customer.customer'
+      'plugin::users-permissions.user'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -865,7 +884,7 @@ export interface ApiBlogBlog extends Schema.CollectionType {
     customer: Attribute.Relation<
       'api::blog.blog',
       'manyToOne',
-      'api::customer.customer'
+      'plugin::users-permissions.user'
     >;
     title: Attribute.String;
     desc: Attribute.Text;
@@ -930,15 +949,15 @@ export interface ApiCartCart extends Schema.CollectionType {
   };
   attributes: {
     quantity: Attribute.Integer;
-    customer: Attribute.Relation<
-      'api::cart.cart',
-      'manyToOne',
-      'api::customer.customer'
-    >;
     cart_items: Attribute.Relation<
       'api::cart.cart',
       'oneToMany',
       'api::cart-item.cart-item'
+    >;
+    user: Attribute.Relation<
+      'api::cart.cart',
+      'manyToOne',
+      'plugin::users-permissions.user'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1024,64 +1043,6 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::category.category',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiCustomerCustomer extends Schema.CollectionType {
-  collectionName: 'customers';
-  info: {
-    singularName: 'customer';
-    pluralName: 'customers';
-    displayName: 'Customer';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    username: Attribute.String & Attribute.Required;
-    email: Attribute.Email;
-    pasword: Attribute.Password;
-    firstName: Attribute.String;
-    lastName: Attribute.String;
-    bio: Attribute.Text;
-    phone: Attribute.String;
-    avatar: Attribute.Media;
-    blogs: Attribute.Relation<
-      'api::customer.customer',
-      'oneToMany',
-      'api::blog.blog'
-    >;
-    addresses: Attribute.Relation<
-      'api::customer.customer',
-      'oneToMany',
-      'api::address.address'
-    >;
-    ratings: Attribute.Relation<
-      'api::customer.customer',
-      'oneToMany',
-      'api::rating.rating'
-    >;
-    carts: Attribute.Relation<
-      'api::customer.customer',
-      'oneToMany',
-      'api::cart.cart'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::customer.customer',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::customer.customer',
       'oneToOne',
       'admin::user'
     > &
@@ -1263,11 +1224,6 @@ export interface ApiRatingRating extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    customer: Attribute.Relation<
-      'api::rating.rating',
-      'manyToOne',
-      'api::customer.customer'
-    >;
     value: Attribute.Integer;
     desc: Attribute.Text;
     products: Attribute.Relation<
@@ -1437,7 +1393,6 @@ declare module '@strapi/types' {
       'api::cart.cart': ApiCartCart;
       'api::cart-item.cart-item': ApiCartItemCartItem;
       'api::category.category': ApiCategoryCategory;
-      'api::customer.customer': ApiCustomerCustomer;
       'api::location.location': ApiLocationLocation;
       'api::product.product': ApiProductProduct;
       'api::product-history.product-history': ApiProductHistoryProductHistory;
