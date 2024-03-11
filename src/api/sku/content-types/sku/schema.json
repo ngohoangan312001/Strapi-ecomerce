@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "skus",
+  "info": {
+    "singularName": "sku",
+    "pluralName": "skus",
+    "displayName": "SKU"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "images": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "sku": {
+      "type": "string"
+    },
+    "price": {
+      "type": "float"
+    },
+    "salePrice": {
+      "type": "float"
+    },
+    "desc": {
+      "type": "text"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "sold": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "string"
+    },
+    "cart_items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::cart-item.cart-item",
+      "mappedBy": "skus"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_references",
+  "info": {
+    "singularName": "product-reference",
+    "pluralName": "product-references",
+    "displayName": "Product Reference"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

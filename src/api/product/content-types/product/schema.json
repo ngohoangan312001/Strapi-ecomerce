@@ -1,0 +1,103 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "Product",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "product_histories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-history.product-history",
+      "mappedBy": "product"
+    },
+    "categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::category.category",
+      "mappedBy": "products"
+    },
+    "thumbNail": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "video": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "slug": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "text"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "sold": {
+      "type": "integer"
+    },
+    "totalRating": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "string"
+    },
+    "isVariant": {
+      "type": "boolean",
+      "default": false
+    },
+    "rating": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::rating.rating",
+      "inversedBy": "products"
+    },
+    "brand": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::brand.brand",
+      "inversedBy": "products"
+    },
+    "product_references": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-reference.product-reference"
+    }
+  }
+}
