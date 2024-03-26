@@ -13,7 +13,9 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "unique": true,
+      "required": true
     },
     "products": {
       "type": "relation",
@@ -22,30 +24,36 @@
       "inversedBy": "categories"
     },
     "thumbNail": {
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ],
       "type": "media",
-      "multiple": false
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "icon": {
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ],
       "type": "media",
-      "multiple": false
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "sub_categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::category.category",
+      "mappedBy": "parentCategory"
+    },
+    "parentCategory": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "sub_categories"
     },
     "slug": {
-      "type": "string"
-    },
-    "parentId": {
-      "type": "integer"
+      "type": "uid",
+      "targetField": "name"
     }
   }
 }

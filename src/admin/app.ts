@@ -4,7 +4,6 @@ import AuthLogo from "./extensions/logo.png";
 import MenuLogo from "./extensions/logo.png";
 // @ts-ignore
 import favicon from "./extensions/logo.png";
-
 export default {
   config: {
     // Replace the Strapi logo in auth (login) views

@@ -13,13 +13,18 @@
   "pluginOptions": {},
   "attributes": {
     "city": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "user": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "addresses"
+    },
+    "District": {
+      "type": "string",
+      "required": true
     }
   }
 }

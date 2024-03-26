@@ -66,33 +66,29 @@
       "configurable": false
     },
     "firstName": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "lastName": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "bio": {
-      "type": "text"
+      "type": "text",
+      "default": "Hi! It's me"
     },
     "phone": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "unique": true
     },
     "avatar": {
       "type": "media",
       "multiple": false,
       "required": false,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ]
-    },
-    "blogs": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::blog.blog",
-      "mappedBy": "customer"
     },
     "addresses": {
       "type": "relation",
@@ -105,6 +101,23 @@
       "relation": "oneToMany",
       "target": "api::cart.cart",
       "mappedBy": "user"
+    },
+    "ratings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::rating.rating",
+      "mappedBy": "user"
+    },
+    "blogs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::blog.blog",
+      "mappedBy": "user"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "username",
+      "required": true
     }
   }
 }

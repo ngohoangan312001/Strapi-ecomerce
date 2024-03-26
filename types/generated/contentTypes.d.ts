@@ -718,16 +718,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    firstName: Attribute.String;
-    lastName: Attribute.String;
-    bio: Attribute.Text;
-    phone: Attribute.String;
+    firstName: Attribute.String & Attribute.Required;
+    lastName: Attribute.String & Attribute.Required;
+    bio: Attribute.Text & Attribute.DefaultTo<"Hi! It's me">;
+    phone: Attribute.String & Attribute.Required & Attribute.Unique;
     avatar: Attribute.Media;
-    blogs: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::blog.blog'
-    >;
     addresses: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',
@@ -738,6 +733,18 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::cart.cart'
     >;
+    ratings: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::rating.rating'
+    >;
+    blogs: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::blog.blog'
+    >;
+    slug: Attribute.UID<'plugin::users-permissions.user', 'username'> &
+      Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -814,7 +821,13 @@ export interface ApiAboutUsAboutUs extends Schema.SingleType {
     draftAndPublish: true;
   };
   attributes: {
-    content: Attribute.Blocks & Attribute.Required;
+    content: Attribute.RichText &
+      Attribute.CustomField<
+        'plugin::ckeditor5.CKEditor',
+        {
+          preset: 'toolbarBalloon';
+        }
+      >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -845,12 +858,13 @@ export interface ApiAddressAddress extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    city: Attribute.String;
+    city: Attribute.String & Attribute.Required;
     user: Attribute.Relation<
       'api::address.address',
       'manyToOne',
       'plugin::users-permissions.user'
     >;
+    District: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -881,14 +895,20 @@ export interface ApiBlogBlog extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    customer: Attribute.Relation<
+    user: Attribute.Relation<
       'api::blog.blog',
       'manyToOne',
       'plugin::users-permissions.user'
     >;
     title: Attribute.String;
     desc: Attribute.Text;
-    body: Attribute.Blocks;
+    body: Attribute.RichText &
+      Attribute.CustomField<
+        'plugin::ckeditor5.CKEditor',
+        {
+          preset: 'toolbarBalloon';
+        }
+      >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -911,13 +931,14 @@ export interface ApiBrandBrand extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    name: Attribute.String;
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
     products: Attribute.Relation<
       'api::brand.brand',
       'oneToMany',
       'api::product.product'
     >;
     image: Attribute.Media;
+    slug: Attribute.UID<'api::brand.brand', 'name'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1022,7 +1043,7 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    name: Attribute.String;
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
     products: Attribute.Relation<
       'api::category.category',
       'manyToMany',
@@ -1030,8 +1051,17 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
     >;
     thumbNail: Attribute.Media;
     icon: Attribute.Media;
-    slug: Attribute.String;
-    parentId: Attribute.Integer;
+    sub_categories: Attribute.Relation<
+      'api::category.category',
+      'oneToMany',
+      'api::category.category'
+    >;
+    parentCategory: Attribute.Relation<
+      'api::category.category',
+      'manyToOne',
+      'api::category.category'
+    >;
+    slug: Attribute.UID<'api::category.category', 'name'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1107,14 +1137,13 @@ export interface ApiProductProduct extends Schema.CollectionType {
     thumbNail: Attribute.Media;
     images: Attribute.Media;
     video: Attribute.Media;
-    slug: Attribute.String;
     desc: Attribute.Text;
     unit: Attribute.String;
     sold: Attribute.Integer;
     totalRating: Attribute.Integer;
     status: Attribute.String;
     isVariant: Attribute.Boolean & Attribute.DefaultTo<false>;
-    rating: Attribute.Relation<
+    ratings: Attribute.Relation<
       'api::product.product',
       'manyToOne',
       'api::rating.rating'
@@ -1129,6 +1158,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'oneToMany',
       'api::product-reference.product-reference'
     >;
+    slug: Attribute.UID<'api::product.product', 'name'> & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1224,9 +1254,23 @@ export interface ApiRatingRating extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    value: Attribute.Integer;
+    value: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 0;
+          max: 10;
+        },
+        number
+      > &
+      Attribute.DefaultTo<0>;
     desc: Attribute.Text;
-    products: Attribute.Relation<
+    user: Attribute.Relation<
+      'api::rating.rating',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    product: Attribute.Relation<
       'api::rating.rating',
       'oneToMany',
       'api::product.product'
@@ -1283,29 +1327,32 @@ export interface ApiSkuSku extends Schema.CollectionType {
   };
 }
 
-export interface ApiSocialPlatformSocialPlatform extends Schema.CollectionType {
-  collectionName: 'social_platforms';
+export interface ApiSocialPlatfromSocialPlatfrom extends Schema.CollectionType {
+  collectionName: 'social_platfroms';
   info: {
-    singularName: 'social-platform';
-    pluralName: 'social-platforms';
-    displayName: 'Social Platform';
+    singularName: 'social-platfrom';
+    pluralName: 'social-platfroms';
+    displayName: 'Social Platfrom';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
     name: Attribute.String;
+    logo: Attribute.Media;
+    desc: Attribute.Text;
+    url: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::social-platform.social-platform',
+      'api::social-platfrom.social-platfrom',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::social-platform.social-platform',
+      'api::social-platfrom.social-platfrom',
       'oneToOne',
       'admin::user'
     > &
@@ -1345,10 +1392,10 @@ export interface ApiWebConfigWebConfig extends Schema.SingleType {
       'oneToMany',
       'api::location.location'
     >;
-    social_platforms: Attribute.Relation<
+    social_platfroms: Attribute.Relation<
       'api::web-config.web-config',
       'oneToMany',
-      'api::social-platform.social-platform'
+      'api::social-platfrom.social-platfrom'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1399,7 +1446,7 @@ declare module '@strapi/types' {
       'api::product-reference.product-reference': ApiProductReferenceProductReference;
       'api::rating.rating': ApiRatingRating;
       'api::sku.sku': ApiSkuSku;
-      'api::social-platform.social-platform': ApiSocialPlatformSocialPlatform;
+      'api::social-platfrom.social-platfrom': ApiSocialPlatfromSocialPlatfrom;
       'api::web-config.web-config': ApiWebConfigWebConfig;
     }
   }

@@ -13,8 +13,11 @@
   "pluginOptions": {},
   "attributes": {
     "content": {
-      "type": "blocks",
-      "required": true
+      "type": "customField",
+      "options": {
+        "preset": "toolbarBalloon"
+      },
+      "customField": "plugin::ckeditor5.CKEditor"
     }
   }
 }

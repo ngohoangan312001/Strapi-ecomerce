@@ -69,10 +69,10 @@
       "relation": "oneToMany",
       "target": "api::location.location"
     },
-    "social_platforms": {
+    "social_platfroms": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::social-platform.social-platform"
+      "target": "api::social-platfrom.social-platfrom"
     }
   }
 }

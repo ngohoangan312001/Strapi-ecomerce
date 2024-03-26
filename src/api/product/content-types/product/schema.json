@@ -60,9 +60,6 @@
         "audios"
       ]
     },
-    "slug": {
-      "type": "string"
-    },
     "desc": {
       "type": "text"
     },
@@ -82,11 +79,11 @@
       "type": "boolean",
       "default": false
     },
-    "rating": {
+    "ratings": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::rating.rating",
-      "inversedBy": "products"
+      "inversedBy": "product"
     },
     "brand": {
       "type": "relation",
@@ -98,6 +95,11 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::product-reference.product-reference"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
     }
   }
 }

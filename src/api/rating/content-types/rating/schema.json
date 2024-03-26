@@ -13,16 +13,26 @@
   "pluginOptions": {},
   "attributes": {
     "value": {
-      "type": "integer"
+      "type": "integer",
+      "default": 0,
+      "required": true,
+      "max": 10,
+      "min": 0
     },
     "desc": {
       "type": "text"
     },
-    "products": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "ratings"
+    },
+    "product": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::product.product",
-      "mappedBy": "rating"
+      "mappedBy": "ratings"
     }
   }
 }

@@ -12,7 +12,7 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "customer": {
+    "user": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
@@ -25,7 +25,11 @@
       "type": "text"
     },
     "body": {
-      "type": "blocks"
+      "type": "customField",
+      "options": {
+        "preset": "toolbarBalloon"
+      },
+      "customField": "plugin::ckeditor5.CKEditor"
     }
   }
 }
