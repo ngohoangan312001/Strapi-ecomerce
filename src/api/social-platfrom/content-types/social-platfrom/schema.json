@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "social_platfroms",
+  "info": {
+    "singularName": "social-platfrom",
+    "pluralName": "social-platfroms",
+    "displayName": "Social Platfrom"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "logo": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "desc": {
+      "type": "text"
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}

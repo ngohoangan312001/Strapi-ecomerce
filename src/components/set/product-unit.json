@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_set_product_units",
+  "info": {
+    "displayName": "Product Unit",
+    "icon": "priceTag"
+  },
+  "options": {},
+  "attributes": {
+    "a": {
+      "type": "string"
+    }
+  }
+}
