@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_variants",
+  "info": {
+    "singularName": "product-variant",
+    "pluralName": "product-variants",
+    "displayName": "Product Variant",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "sku": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::sku.sku",
+      "inversedBy": "product_variants"
+    },
+    "option_values": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::option-value.option-value",
+      "mappedBy": "product_variant"
+    }
+  }
+}

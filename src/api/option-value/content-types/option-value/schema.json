@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "option_values",
+  "info": {
+    "singularName": "option-value",
+    "pluralName": "option-values",
+    "displayName": "Option Value",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "option": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::option.option",
+      "inversedBy": "option_values"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "product_variant": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product-variant.product-variant",
+      "inversedBy": "option_values"
+    }
+  }
+}
