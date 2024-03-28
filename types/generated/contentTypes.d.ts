@@ -1111,6 +1111,87 @@ export interface ApiLocationLocation extends Schema.CollectionType {
   };
 }
 
+export interface ApiOptionOption extends Schema.CollectionType {
+  collectionName: 'options';
+  info: {
+    singularName: 'option';
+    pluralName: 'options';
+    displayName: 'Option';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
+    desc: Attribute.String;
+    option_values: Attribute.Relation<
+      'api::option.option',
+      'oneToMany',
+      'api::option-value.option-value'
+    >;
+    slug: Attribute.UID<'api::option.option', 'name'> & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::option.option',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::option.option',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiOptionValueOptionValue extends Schema.CollectionType {
+  collectionName: 'option_values';
+  info: {
+    singularName: 'option-value';
+    pluralName: 'option-values';
+    displayName: 'Option Value';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
+    option: Attribute.Relation<
+      'api::option-value.option-value',
+      'manyToOne',
+      'api::option.option'
+    >;
+    slug: Attribute.UID<'api::option-value.option-value', 'name'> &
+      Attribute.Required;
+    product_variant: Attribute.Relation<
+      'api::option-value.option-value',
+      'manyToOne',
+      'api::product-variant.product-variant'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::option-value.option-value',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::option-value.option-value',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiProductProduct extends Schema.CollectionType {
   collectionName: 'products';
   info: {
@@ -1159,6 +1240,11 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'api::product-reference.product-reference'
     >;
     slug: Attribute.UID<'api::product.product', 'name'> & Attribute.Required;
+    skuses: Attribute.Relation<
+      'api::product.product',
+      'oneToMany',
+      'api::sku.sku'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1242,6 +1328,46 @@ export interface ApiProductReferenceProductReference
   };
 }
 
+export interface ApiProductVariantProductVariant extends Schema.CollectionType {
+  collectionName: 'product_variants';
+  info: {
+    singularName: 'product-variant';
+    pluralName: 'product-variants';
+    displayName: 'Product Variant';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    sku: Attribute.Relation<
+      'api::product-variant.product-variant',
+      'manyToOne',
+      'api::sku.sku'
+    >;
+    option_values: Attribute.Relation<
+      'api::product-variant.product-variant',
+      'oneToMany',
+      'api::option-value.option-value'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::product-variant.product-variant',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::product-variant.product-variant',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiRatingRating extends Schema.CollectionType {
   collectionName: 'ratings';
   info: {
@@ -1299,23 +1425,34 @@ export interface ApiSkuSku extends Schema.CollectionType {
     singularName: 'sku';
     pluralName: 'skus';
     displayName: 'SKU';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
     images: Attribute.Media;
-    sku: Attribute.String;
+    sku: Attribute.String & Attribute.Required & Attribute.Unique;
     price: Attribute.Float;
     salePrice: Attribute.Float;
     desc: Attribute.Text;
     quantity: Attribute.Integer;
-    sold: Attribute.Integer;
+    sold: Attribute.Integer & Attribute.Required & Attribute.DefaultTo<0>;
     status: Attribute.String;
     cart_items: Attribute.Relation<
       'api::sku.sku',
       'oneToMany',
       'api::cart-item.cart-item'
+    >;
+    product_variants: Attribute.Relation<
+      'api::sku.sku',
+      'oneToMany',
+      'api::product-variant.product-variant'
+    >;
+    product: Attribute.Relation<
+      'api::sku.sku',
+      'manyToOne',
+      'api::product.product'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1441,9 +1578,12 @@ declare module '@strapi/types' {
       'api::cart-item.cart-item': ApiCartItemCartItem;
       'api::category.category': ApiCategoryCategory;
       'api::location.location': ApiLocationLocation;
+      'api::option.option': ApiOptionOption;
+      'api::option-value.option-value': ApiOptionValueOptionValue;
       'api::product.product': ApiProductProduct;
       'api::product-history.product-history': ApiProductHistoryProductHistory;
       'api::product-reference.product-reference': ApiProductReferenceProductReference;
+      'api::product-variant.product-variant': ApiProductVariantProductVariant;
       'api::rating.rating': ApiRatingRating;
       'api::sku.sku': ApiSkuSku;
       'api::social-platfrom.social-platfrom': ApiSocialPlatfromSocialPlatfrom;

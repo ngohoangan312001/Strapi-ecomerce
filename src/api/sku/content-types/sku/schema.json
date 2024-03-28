@@ -4,7 +4,8 @@
   "info": {
     "singularName": "sku",
     "pluralName": "skus",
-    "displayName": "SKU"
+    "displayName": "SKU",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -12,17 +13,20 @@
   "pluginOptions": {},
   "attributes": {
     "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": true
+      ]
     },
     "sku": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "unique": true
     },
     "price": {
       "type": "float"
@@ -37,7 +41,9 @@
       "type": "integer"
     },
     "sold": {
-      "type": "integer"
+      "type": "integer",
+      "default": 0,
+      "required": true
     },
     "status": {
       "type": "string"
@@ -47,6 +53,18 @@
       "relation": "oneToMany",
       "target": "api::cart-item.cart-item",
       "mappedBy": "skus"
+    },
+    "product_variants": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-variant.product-variant",
+      "mappedBy": "sku"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product.product",
+      "inversedBy": "skuses"
     }
   }
 }
